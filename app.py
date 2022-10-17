@@ -9,8 +9,8 @@ from itertools import combinations
 st.set_page_config(page_title="YGO Brick Calculator",
  page_icon="random",
  menu_items={
-        'Report a bug': "github link"
-        'About': "# This is a header. This is an *extremely* cool app!"
+        'Report a bug': "https://github.com/santiariza15/YGO-Brick-Calculator",
+        'About': "This is a brick calculator using 5000 random opening hands as a test."
     }
 )
 st.title('Yu-Gi-Oh! Brick Calculator')
