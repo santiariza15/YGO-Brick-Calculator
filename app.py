@@ -25,12 +25,12 @@ if file is not None:
     df_deck = pd.read_json(json.dumps(page["data"]))
     one_card_combos = st.multiselect(
     'Select your one card combo cards:',
-    df_deck["name"].unique()
+    df_deck["name"]
     )
     two_card_combos = []
     drawing_cards = st.multiselect(
     'Select your drawing cards:',
-    df_deck["name"].unique(),
+    df_deck[~df_deck.name.isin(one_card_combos)]["name"],
     )
     for card in drawing_cards:
         with contextlib.suppress(ValueError):
