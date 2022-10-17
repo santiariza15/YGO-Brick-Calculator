@@ -6,6 +6,13 @@ import requests
 import json
 from itertools import combinations
 
+st.set_page_config(page_title="YGO Brick Calculator",
+ page_icon="random",
+ menu_items={
+        'Report a bug': "github link"
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
+)
 st.title('Yu-Gi-Oh! Brick Calculator')
 
 file = st.file_uploader("Please choose a file",type="ydk")
