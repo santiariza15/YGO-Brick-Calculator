@@ -44,7 +44,7 @@ if file is not None:
             if cards in hand:
                 counter += 1
                 flag = True
-                continue
+                break
         if flag == True:
             flag = False
             continue
@@ -52,7 +52,7 @@ if file is not None:
             if cards[0] in hand and cards[1] in hand:
                 counter += 1
                 flag = True
-                continue
+                break
         if flag == True:
             flag = False
     print(counter)
