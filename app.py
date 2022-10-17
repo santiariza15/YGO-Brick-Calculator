@@ -17,7 +17,11 @@ if file is not None:
             main.append(card)
         if "extra" in card or "side" in card:
             break
-
+    first = st.checkbox('Going first: ', True)
+    if first:
+        cards_in_hand = 5
+    else:
+        cards_in_hand = 6
     df = pd.DataFrame (main, columns=["Cards"])
     main_string = ",".join(df["Cards"])
     URL = f'https://db.ygoprodeck.com/api/v7/cardinfo.php?id={main_string}'
@@ -37,7 +41,7 @@ if file is not None:
             while True:
                 main.remove(card)
     flag = False
-    opening_hands = [random.choices(df_deck["name"],k=5) for _ in range(5000)]
+    opening_hands = [random.choices(df_deck["name"],k=cards_in_hand) for _ in range(5000)]
     counter = 0
     for hand in opening_hands:
         for cards in one_card_combos:
@@ -55,6 +59,6 @@ if file is not None:
                 break
         if flag == True:
             flag = False
-    print(counter)
+
     st.write("Probability to brick: ")
     st.write(f"{(1 - counter / 5000):.0%}")
