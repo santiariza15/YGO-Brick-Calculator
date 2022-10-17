@@ -34,7 +34,7 @@ if file is not None:
     page = requests.get(URL).json()
     df_deck = pd.read_json(json.dumps(page["data"]))
     drawing_cards = st.multiselect(
-    'Select your drawing cards:',
+    'Select your cards with drawing effects:',
     df_deck["name"],
     help = "Select the cards that make you draw. This reduces the size of the deck in calculations."
     )
