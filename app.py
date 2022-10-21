@@ -28,8 +28,8 @@ if file is not None:
             break
     first = st.checkbox('Going first: ', True)
     cards_in_hand = 5 if first else 6
-    df = pd.DataFrame (main, columns=["Cards"])
-    main_string = ",".join(df["Cards"])
+    df = pd.DataFrame (main, columns=["cards"])
+    main_string = ",".join(df["cards"])
     URL = f'https://db.ygoprodeck.com/api/v7/cardinfo.php?id={main_string}'
     page = requests.get(URL).json()
     df_deck = pd.read_json(json.dumps(page["data"]))
@@ -51,7 +51,11 @@ if file is not None:
     list(combinations(deck_names_no_one_combos, 2)),
     help = "Select the pair of cards needed for your engine to start."
     )
-    
+    deck_no_drawing_cards_ids = df_deck[df_deck.name.isin(deck_no_drawing_cards)]["id"].to_list()
+    all_deck_ids = ([int(x) for x in df.cards.to_list()])
+    set_dndci = set(deck_no_drawing_cards_ids)
+    all_deck_ids = [x for x in all_deck_ids if x in set_dndci]
+    all_deck = [df_deck[df_deck.id == x]["name"].to_list()[0] for x in all_deck_ids]
     flag = False
     opening_hands = [random.choices(deck_no_drawing_cards,k=cards_in_hand) for _ in range(5000)]
     counter = 0
