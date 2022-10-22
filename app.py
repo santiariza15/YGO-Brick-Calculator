@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 import json
 from itertools import combinations
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="YGO Brick Calculator",
  page_icon="random",
@@ -14,7 +15,12 @@ st.set_page_config(page_title="YGO Brick Calculator",
     }
 )
 st.title('Yu-Gi-Oh! Brick Calculator')
-
+with st.expander("See explanation"):
+    st.write("""
+        This calculator uses your uploaded deck in YDK format and creates a sample of
+        5000 different possible starting hands. Based on the information you provide on
+        the select boxes, the calculator provides you with a brick percentage.
+    """)
 file = st.file_uploader("Please choose a file",type="ydk")
 
 if file is not None:
@@ -51,13 +57,13 @@ if file is not None:
     list(combinations(deck_names_no_one_combos, 2)),
     help = "Select the pair of cards needed for your engine to start."
     )
-    deck_no_drawing_cards_ids = df_deck[df_deck.name.isin(deck_no_drawing_cards)]["id"].to_list()
+    #deck_no_drawing_cards_ids = df_deck[df_deck.name.isin(deck_no_drawing_cards)]["id"].to_list()
     all_deck_ids = ([int(x) for x in df.cards.to_list()])
-    set_dndci = set(deck_no_drawing_cards_ids)
-    all_deck_ids = [x for x in all_deck_ids if x in set_dndci]
+    #set_dndci = set(deck_no_drawing_cards_ids)
+    #all_deck_ids = [x for x in all_deck_ids if x in set_dndci]
     all_deck = [df_deck[df_deck.id == x]["name"].to_list()[0] for x in all_deck_ids]
     flag = False
-    opening_hands = [random.choices(deck_no_drawing_cards,k=cards_in_hand) for _ in range(5000)]
+    opening_hands = [random.choices(all_deck,k=cards_in_hand) for _ in range(5000)]
     counter = 0
     for hand in opening_hands:
         for cards in one_card_combos:
@@ -75,6 +81,25 @@ if file is not None:
                 break
         if flag == True:
             flag = False
+            continue
+        for cards in drawing_cards:
+            if cards in hand:
+                counter += 0.5
+                flag = True
+                break
+        if flag == True:
+            flag = False
 
     st.write("Probability to brick: ")
     st.write(f"{(1 - counter / 5000):.0%}")
+
+    col1, col2 = st.columns(2, gap="small")
+    with col1:
+        if st.button("Check your opening hands"):
+            st.write(opening_hands)
+    with col2:
+        if st.button("Check the opening hand distribution"):
+            flat_list = [item for sublist in opening_hands for item in sublist]
+            fig, ax = plt.subplots()
+            ax.hist(flat_list, bins=len(main)+1, orientation='horizontal', align="mid")
+            st.pyplot(fig, True)
