@@ -101,5 +101,6 @@ if file is not None:
         if st.button("Check the opening hand distribution"):
             flat_list = [item for sublist in opening_hands for item in sublist]
             fig, ax = plt.subplots()
-            ax.hist(flat_list, bins=len(main)+1, orientation='horizontal', align="mid")
+            ax.hist(flat_list, bins=len(df_deck)*2, orientation='horizontal', align="mid")
+            print(len(df_deck)*2)
             st.pyplot(fig, True)
